@@ -2,6 +2,8 @@ using CommandLine;
 using DbfDataReader;
 using System;
 using System.Linq;
+using System.Text;
+using System.IO;
 
 namespace Dbf
 {
@@ -20,6 +22,10 @@ namespace Dbf
             if (options.Csv)
             {
                 PrintCsv(options);
+            }
+            else if (options.Schema)
+            {
+                PrintSchema(options);
             }
             else
             {
@@ -85,6 +91,87 @@ namespace Dbf
                     Console.WriteLine(values);
                 }
             }
+        }
+
+        private static void PrintSchema(Options options)
+        {            
+            using (var dbfTable = new DbfTable(options.Filename))
+            {
+                var tableName = Path.GetFileNameWithoutExtension(options.Filename);
+                Console.WriteLine($"CREATE TABLE [dbo].[{tableName}]");
+                Console.WriteLine("(");
+
+                foreach (var dbfColumn in dbfTable.Columns)
+                {
+                    var columnSchema = ColumnSchema(dbfColumn);
+                    Console.Write($"  {columnSchema}");
+
+                    if ((dbfColumn.Index < dbfTable.Columns.Count) ||
+                        (!options.SkipDeleted))
+                    {
+                        Console.Write(",");
+                    }
+                    Console.WriteLine();
+                }
+
+                if (!options.SkipDeleted)
+                {
+                    Console.WriteLine("  [deleted] [bit] NULL DEFAULT ((0))");
+                }
+
+                Console.WriteLine(")");
+            }
+        }
+
+        private static string ColumnSchema(DbfColumn dbfColumn)
+        {
+            var schema = string.Empty;
+            switch (dbfColumn.ColumnType) 
+            {
+                case DbfColumnType.Boolean:
+                    schema = $"[{dbfColumn.Name}] [bit] NULL DEFAULT ((0))";
+                    break;
+                case DbfColumnType.Character:
+                    schema = $"[{dbfColumn.Name}] [nvarchar]({dbfColumn.Length})  NULL";
+                    break;
+                case DbfColumnType.Currency:
+                    schema = $"[{dbfColumn.Name}] [decimal]({dbfColumn.Length + dbfColumn.DecimalCount},{dbfColumn.DecimalCount}) NULL DEFAULT (NULL)";
+                    break;
+                case DbfColumnType.Date:
+                    schema = $"[{dbfColumn.Name}] [date] NULL DEFAULT (NULL)";
+                    break;
+                case DbfColumnType.DateTime:
+                    schema = $"[{dbfColumn.Name}] [datetime] NULL DEFAULT (NULL)";
+                    break;
+                case DbfColumnType.Double:
+                    schema = $"[{dbfColumn.Name}] [decimal]({dbfColumn.Length + dbfColumn.DecimalCount},{dbfColumn.DecimalCount}) NULL DEFAULT (NULL)";
+                    break;
+                case DbfColumnType.Float:
+                    schema = $"[{dbfColumn.Name}] [decimal]({dbfColumn.Length + dbfColumn.DecimalCount},{dbfColumn.DecimalCount}) NULL DEFAULT (NULL)";
+                    break;
+                case DbfColumnType.General:
+                    schema = $"[{dbfColumn.Name}] [nvarchar]({dbfColumn.Length})  NULL";
+                    break;
+                case DbfColumnType.Memo:
+                    schema = $"[{dbfColumn.Name}] [ntext]  NULL";
+                    break;
+                case DbfColumnType.Number:
+                    if (dbfColumn.DecimalCount > 0)
+                    {
+                        schema = $"[{dbfColumn.Name}] [decimal]({dbfColumn.Length + dbfColumn.DecimalCount},{dbfColumn.DecimalCount}) NULL DEFAULT (NULL)";
+                    }
+                    else 
+                    {
+                        schema = $"[{dbfColumn.Name}] [int] NULL DEFAULT (NULL)";
+                    }
+                    break;
+                case DbfColumnType.Signedlong:
+                    schema = $"[{dbfColumn.Name}] [int] NULL DEFAULT (NULL)";
+                    break;
+                default:
+                    break;
+            }
+            return schema;
         }
 
         private static string EscapeValue(IDbfValue dbfValue)

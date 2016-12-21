@@ -11,6 +11,9 @@ namespace Dbf
         [Option(Default=false, HelpText="Print as CSV file")]
         public bool Csv { get; set; }
 
+        [Option(Default=false, HelpText="Print SQL Schema")]
+        public bool Schema { get; set; }
+
         [Option(Default=true, HelpText="Whether to skip deleted records")]
         public bool SkipDeleted { get; set; }
 
