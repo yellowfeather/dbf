@@ -12,7 +12,7 @@ test: off
 artifacts:
 - path: .\artifacts\win10-x64
   name: dbf-win10-x64
-- path: .\artifacts\osx.10.10-x64
+- path: .\artifacts\osx.10.12-x64
   name: dbf-osx.10.12-x64
 - path: .\artifacts\ubuntu.14.04-x64
   name: dbf-ubuntu.14.04-x64
