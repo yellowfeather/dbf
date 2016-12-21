@@ -13,7 +13,7 @@ artifacts:
 - path: .\artifacts\win10-x64
   name: dbf-win10-x64
 - path: .\artifacts\osx.10.10-x64
-  name: dbf-osx.10.10-x64
+  name: dbf-osx.10.12-x64
 - path: .\artifacts\ubuntu.14.04-x64
   name: dbf-ubuntu.14.04-x64
 deploy:
@@ -21,7 +21,7 @@ deploy:
   provider: GitHub
   auth_token:
     secure: zIuIoM6+3Bc95kSVegG4Lwls01vu+J5OlwOFG2CSaB2YLNdYsTtNqJVnWrnIXMBl
-  artifact: artifacts\dbf-win10-x64.zip,artifacts\dbf-osx.10.10-x64.zip,artifacts\dbf-ubuntu.14.04-x64.zip
+  artifact: artifacts\dbf-win10-x64.zip,artifacts\dbf-osx.10.12-x64.zip,artifacts\dbf-ubuntu.14.04-x64.zip
   draft: false
   prerelease: false
   on:
