@@ -1,5 +1,7 @@
 # dbf
 
+[![Build status](https://ci.appveyor.com/api/projects/status/n4hx7c4qbjs89c8x?svg=true)](https://ci.appveyor.com/project/chrisrichards/dbf)
+
 Command line utility to display DBF info and contents
 
 ```
