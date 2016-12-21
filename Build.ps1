@@ -58,5 +58,5 @@ $revision = @{ $true = $env:APPVEYOR_BUILD_NUMBER; $false = 1 }[$env:APPVEYOR_BU
 $revision = "{0:D}" -f [convert]::ToInt32($revision, 10)
 
 exec { & dotnet publish -c Release -r win10-x64 -o .\artifacts/win10-x64 --version-suffix=$revision }
-exec { & dotnet publish -c Release -r osx.10.10-x64 -o .\artifacts/osx.10.10-x64 --version-suffix=$revision }
+exec { & dotnet publish -c Release -r osx.10.12-x64 -o .\artifacts/osx.10.12-x64 --version-suffix=$revision }
 exec { & dotnet publish -c Release -r ubuntu.14.04-x64 -o .\artifacts/ubuntu.14.04-x64 --version-suffix=$revision }
