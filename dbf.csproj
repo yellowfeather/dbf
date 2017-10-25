@@ -1,8 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <Description>Command line utility to display DBF info and contents </Description>
+    <Copyright>Copyright Chris Richards</Copyright>
+    <Authors>Chris Richards</Authors>
     <TargetFramework>netcoreapp1.1</TargetFramework>
+    <AssemblyName>dbf</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <PackageId>dbf</PackageId>
+    <PackageTags>dbf;dBase;xBase;Clipper;FoxPro;BulkCopy;SqlServer</PackageTags>
+    <PackageProjectUrl>https://github.com/yellowfeather/dbf</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/yellowfeather/dbf/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>git://github.com/yellowfeather/dbf</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
