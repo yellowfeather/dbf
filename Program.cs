@@ -37,7 +37,8 @@ namespace Dbf
 
         private static void PrintSummaryInfo(Options options)
         {
-            using (var dbfTable = new DbfTable(options.Filename))
+            var encoding = GetEncoding();
+            using (var dbfTable = new DbfTable(options.Filename, encoding))
             {
                 var header = dbfTable.Header;
 
@@ -63,7 +64,8 @@ namespace Dbf
 
         private static void PrintCsv(Options options)
         {
-            using (var dbfTable = new DbfTable(options.Filename))
+            var encoding = GetEncoding();
+            using (var dbfTable = new DbfTable(options.Filename, encoding))
             {
                 var columnNames = string.Join(",", dbfTable.Columns.Select(c => c.Name));
                 if (!options.SkipDeleted)
@@ -94,8 +96,9 @@ namespace Dbf
         }
 
         private static void PrintSchema(Options options)
-        {            
-            using (var dbfTable = new DbfTable(options.Filename))
+        {
+            var encoding = GetEncoding();
+            using (var dbfTable = new DbfTable(options.Filename, encoding))
             {
                 var tableName = Path.GetFileNameWithoutExtension(options.Filename);
                 Console.WriteLine($"CREATE TABLE [dbo].[{tableName}]");
@@ -121,6 +124,11 @@ namespace Dbf
 
                 Console.WriteLine(")");
             }
+        }
+
+        private static Encoding GetEncoding()
+        {
+            return Encoding.GetEncoding("1252");
         }
 
         private static string ColumnSchema(DbfColumn dbfColumn)
