@@ -1,9 +1,9 @@
-using CommandLine;
-using DbfDataReader;
 using System;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.IO;
+using CommandLine;
+using DbfDataReader;
 
 namespace Dbf
 {
@@ -14,25 +14,17 @@ namespace Dbf
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             return Parser.Default.ParseArguments<Options>(args)
-                .MapResult(
-                options => RunAndReturnExitCode(options),
-                _ => 1);
+                .MapResult(RunAndReturnExitCode, _ => 1);
         }
 
         public static int RunAndReturnExitCode(Options options)
         {
             if (options.Csv)
-            {
                 PrintCsv(options);
-            }
             else if (options.Schema)
-            {
                 PrintSchema(options);
-            }
             else
-            {
                 PrintSummaryInfo(options);
-            }
 
             return 0;
         }
@@ -52,14 +44,15 @@ namespace Dbf
                 Console.WriteLine("Fields:");
                 Console.WriteLine("Name             Type       Length     Decimal");
                 Console.WriteLine("------------------------------------------------------------------------------");
-                
+
                 foreach (var dbfColumn in dbfTable.Columns)
                 {
                     var name = dbfColumn.Name;
-                    var columnType = ((char)dbfColumn.ColumnType).ToString();
+                    var columnType = ((char) dbfColumn.ColumnType).ToString();
                     var length = dbfColumn.Length.ToString();
                     var decimalCount = dbfColumn.DecimalCount;
-                    Console.WriteLine($"{name.PadRight(16)} {columnType.PadRight(10)} {length.PadRight(10)} {decimalCount}");
+                    Console.WriteLine(
+                        $"{name.PadRight(16)} {columnType.PadRight(10)} {length.PadRight(10)} {decimalCount}");
                 }
             }
         }
@@ -70,27 +63,18 @@ namespace Dbf
             using (var dbfTable = new DbfTable(options.Filename, encoding))
             {
                 var columnNames = string.Join(",", dbfTable.Columns.Select(c => c.Name));
-                if (!options.SkipDeleted)
-                {
-                    columnNames += ",Deleted";
-                }
+                if (!options.SkipDeleted) columnNames += ",Deleted";
 
                 Console.WriteLine(columnNames);
-                
+
                 var dbfRecord = new DbfRecord(dbfTable);
 
                 while (dbfTable.Read(dbfRecord))
                 {
-                    if (options.SkipDeleted && dbfRecord.IsDeleted)
-                    {
-                        continue;
-                    }
+                    if (options.SkipDeleted && dbfRecord.IsDeleted) continue;
 
                     var values = string.Join(",", dbfRecord.Values.Select(v => EscapeValue(v)));
-                    if (!options.SkipDeleted)
-                    {
-                        values += $",{dbfRecord.IsDeleted}";
-                    }
+                    if (!options.SkipDeleted) values += $",{dbfRecord.IsDeleted}";
 
                     Console.WriteLine(values);
                 }
@@ -111,18 +95,13 @@ namespace Dbf
                     var columnSchema = ColumnSchema(dbfColumn);
                     Console.Write($"  {columnSchema}");
 
-                    if ((dbfColumn.Index < dbfTable.Columns.Count) ||
-                        (!options.SkipDeleted))
-                    {
+                    if (dbfColumn.Index < dbfTable.Columns.Count ||
+                        !options.SkipDeleted)
                         Console.Write(",");
-                    }
                     Console.WriteLine();
                 }
 
-                if (!options.SkipDeleted)
-                {
-                    Console.WriteLine("  [deleted] [bit] NULL DEFAULT ((0))");
-                }
+                if (!options.SkipDeleted) Console.WriteLine("  [deleted] [bit] NULL DEFAULT ((0))");
 
                 Console.WriteLine(")");
             }
@@ -136,7 +115,7 @@ namespace Dbf
         private static string ColumnSchema(DbfColumn dbfColumn)
         {
             var schema = string.Empty;
-            switch (dbfColumn.ColumnType) 
+            switch (dbfColumn.ColumnType)
             {
                 case DbfColumnType.Boolean:
                     schema = $"[{dbfColumn.Name}] [bit] NULL DEFAULT ((0))";
@@ -145,7 +124,8 @@ namespace Dbf
                     schema = $"[{dbfColumn.Name}] [nvarchar]({dbfColumn.Length})  NULL";
                     break;
                 case DbfColumnType.Currency:
-                    schema = $"[{dbfColumn.Name}] [decimal]({dbfColumn.Length + dbfColumn.DecimalCount},{dbfColumn.DecimalCount}) NULL DEFAULT (NULL)";
+                    schema =
+                        $"[{dbfColumn.Name}] [decimal]({dbfColumn.Length + dbfColumn.DecimalCount},{dbfColumn.DecimalCount}) NULL DEFAULT (NULL)";
                     break;
                 case DbfColumnType.Date:
                     schema = $"[{dbfColumn.Name}] [date] NULL DEFAULT (NULL)";
@@ -154,10 +134,12 @@ namespace Dbf
                     schema = $"[{dbfColumn.Name}] [datetime] NULL DEFAULT (NULL)";
                     break;
                 case DbfColumnType.Double:
-                    schema = $"[{dbfColumn.Name}] [decimal]({dbfColumn.Length + dbfColumn.DecimalCount},{dbfColumn.DecimalCount}) NULL DEFAULT (NULL)";
+                    schema =
+                        $"[{dbfColumn.Name}] [decimal]({dbfColumn.Length + dbfColumn.DecimalCount},{dbfColumn.DecimalCount}) NULL DEFAULT (NULL)";
                     break;
                 case DbfColumnType.Float:
-                    schema = $"[{dbfColumn.Name}] [decimal]({dbfColumn.Length + dbfColumn.DecimalCount},{dbfColumn.DecimalCount}) NULL DEFAULT (NULL)";
+                    schema =
+                        $"[{dbfColumn.Name}] [decimal]({dbfColumn.Length + dbfColumn.DecimalCount},{dbfColumn.DecimalCount}) NULL DEFAULT (NULL)";
                     break;
                 case DbfColumnType.General:
                     schema = $"[{dbfColumn.Name}] [nvarchar]({dbfColumn.Length})  NULL";
@@ -167,20 +149,16 @@ namespace Dbf
                     break;
                 case DbfColumnType.Number:
                     if (dbfColumn.DecimalCount > 0)
-                    {
-                        schema = $"[{dbfColumn.Name}] [decimal]({dbfColumn.Length + dbfColumn.DecimalCount},{dbfColumn.DecimalCount}) NULL DEFAULT (NULL)";
-                    }
-                    else 
-                    {
+                        schema =
+                            $"[{dbfColumn.Name}] [decimal]({dbfColumn.Length + dbfColumn.DecimalCount},{dbfColumn.DecimalCount}) NULL DEFAULT (NULL)";
+                    else
                         schema = $"[{dbfColumn.Name}] [int] NULL DEFAULT (NULL)";
-                    }
                     break;
                 case DbfColumnType.Signedlong:
                     schema = $"[{dbfColumn.Name}] [int] NULL DEFAULT (NULL)";
                     break;
-                default:
-                    break;
             }
+
             return schema;
         }
 
@@ -188,12 +166,8 @@ namespace Dbf
         {
             var value = dbfValue.ToString();
             if (dbfValue is DbfValueString)
-            {
                 if (value.Contains(","))
-                {
                     value = $"\"{value}\"";
-                }
-            }
 
             return value;
         }
