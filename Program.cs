@@ -11,6 +11,8 @@ namespace Dbf
     {
         public static int Main(string[] args)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
             return Parser.Default.ParseArguments<Options>(args)
                 .MapResult(
                 options => RunAndReturnExitCode(options),
