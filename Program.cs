@@ -130,7 +130,7 @@ namespace Dbf
 
         private static Encoding GetEncoding()
         {
-            return Encoding.GetEncoding("1252");
+            return Encoding.GetEncoding(1252);
         }
 
         private static string ColumnSchema(DbfColumn dbfColumn)
