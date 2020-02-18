@@ -154,7 +154,7 @@ namespace Dbf
                     else
                         schema = $"[{dbfColumn.Name}] [int] NULL DEFAULT (NULL)";
                     break;
-                case DbfColumnType.Signedlong:
+                case DbfColumnType.SignedLong:
                     schema = $"[{dbfColumn.Name}] [int] NULL DEFAULT (NULL)";
                     break;
             }
