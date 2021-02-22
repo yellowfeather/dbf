@@ -4,7 +4,7 @@
     <Description>Command line utility to display DBF info and contents </Description>
     <Copyright>Copyright Chris Richards</Copyright>
     <Authors>Chris Richards</Authors>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>dbf</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>dbf</PackageId>
