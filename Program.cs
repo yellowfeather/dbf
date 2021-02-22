@@ -9,6 +9,8 @@ namespace Dbf
 {
     public class Program
     {
+        private static readonly char[] newLineChars = { '\r', '\n' };
+
         public static int Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -162,13 +164,18 @@ namespace Dbf
             return schema;
         }
 
+        
         private static string EscapeValue(IDbfValue dbfValue)
         {
             var value = dbfValue.ToString();
             if (dbfValue is DbfValueString)
-                if (value.Contains(","))
+            {
+                if (value.Contains(",") || value.IndexOfAny(newLineChars) > -1)
+                {
+                    value = value.Replace("\"", "\"\"");
                     value = $"\"{value}\"";
-
+                }
+            }
             return value;
         }
     }
