@@ -21,7 +21,7 @@ deploy:
   description: 'Release description'
   provider: GitHub
   auth_token:
-    secure: Rv0SwEqk9bEyOXHF5XLj8Dd4AzNZS0sY9yuCXaVolThQ5WfE/RzCgWwCgFpv2wVy
+    secure: 88L4yik9rE/BrNQhOOlmWNBrS1j7gPawl7kZMuWcFraAVHbKTfPMiacj70+/jKYm
   artifact: artifacts\dbf-win10-x64.zip,artifacts\dbf-osx.10.12-x64.zip,artifacts\dbf-ubuntu.14.04-x64.zip
   draft: false
   prerelease: false
