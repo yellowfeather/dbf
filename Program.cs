@@ -47,7 +47,7 @@ namespace Dbf
 
                 foreach (var dbfColumn in dbfTable.Columns)
                 {
-                    var name = dbfColumn.Name;
+                    var name = dbfColumn.ColumnName;
                     var columnType = ((char) dbfColumn.ColumnType).ToString();
                     var length = dbfColumn.Length.ToString();
                     var decimalCount = dbfColumn.DecimalCount;
@@ -62,7 +62,7 @@ namespace Dbf
             var encoding = GetEncoding();
             using (var dbfTable = new DbfTable(options.Filename, encoding))
             {
-                var columnNames = string.Join(",", dbfTable.Columns.Select(c => c.Name));
+                var columnNames = string.Join(",", dbfTable.Columns.Select(c => c.ColumnName));
                 if (!options.SkipDeleted) columnNames += ",Deleted";
 
                 Console.WriteLine(columnNames);
@@ -95,7 +95,7 @@ namespace Dbf
                     var columnSchema = ColumnSchema(dbfColumn);
                     Console.Write($"  {columnSchema}");
 
-                    if (dbfColumn.Index < dbfTable.Columns.Count ||
+                    if (dbfColumn.ColumnOrdinal < dbfTable.Columns.Count ||
                         !options.SkipDeleted)
                         Console.Write(",");
                     Console.WriteLine();
@@ -118,44 +118,44 @@ namespace Dbf
             switch (dbfColumn.ColumnType)
             {
                 case DbfColumnType.Boolean:
-                    schema = $"[{dbfColumn.Name}] [bit] NULL DEFAULT ((0))";
+                    schema = $"[{dbfColumn.ColumnName}] [bit] NULL DEFAULT ((0))";
                     break;
                 case DbfColumnType.Character:
-                    schema = $"[{dbfColumn.Name}] [nvarchar]({dbfColumn.Length})  NULL";
+                    schema = $"[{dbfColumn.ColumnName}] [nvarchar]({dbfColumn.Length})  NULL";
                     break;
                 case DbfColumnType.Currency:
                     schema =
-                        $"[{dbfColumn.Name}] [decimal]({dbfColumn.Length + dbfColumn.DecimalCount},{dbfColumn.DecimalCount}) NULL DEFAULT (NULL)";
+                        $"[{dbfColumn.ColumnName}] [decimal]({dbfColumn.Length + dbfColumn.DecimalCount},{dbfColumn.DecimalCount}) NULL DEFAULT (NULL)";
                     break;
                 case DbfColumnType.Date:
-                    schema = $"[{dbfColumn.Name}] [date] NULL DEFAULT (NULL)";
+                    schema = $"[{dbfColumn.ColumnName}] [date] NULL DEFAULT (NULL)";
                     break;
                 case DbfColumnType.DateTime:
-                    schema = $"[{dbfColumn.Name}] [datetime] NULL DEFAULT (NULL)";
+                    schema = $"[{dbfColumn.ColumnName}] [datetime] NULL DEFAULT (NULL)";
                     break;
                 case DbfColumnType.Double:
                     schema =
-                        $"[{dbfColumn.Name}] [decimal]({dbfColumn.Length + dbfColumn.DecimalCount},{dbfColumn.DecimalCount}) NULL DEFAULT (NULL)";
+                        $"[{dbfColumn.ColumnName}] [decimal]({dbfColumn.Length + dbfColumn.DecimalCount},{dbfColumn.DecimalCount}) NULL DEFAULT (NULL)";
                     break;
                 case DbfColumnType.Float:
                     schema =
-                        $"[{dbfColumn.Name}] [decimal]({dbfColumn.Length + dbfColumn.DecimalCount},{dbfColumn.DecimalCount}) NULL DEFAULT (NULL)";
+                        $"[{dbfColumn.ColumnName}] [decimal]({dbfColumn.Length + dbfColumn.DecimalCount},{dbfColumn.DecimalCount}) NULL DEFAULT (NULL)";
                     break;
                 case DbfColumnType.General:
-                    schema = $"[{dbfColumn.Name}] [nvarchar]({dbfColumn.Length})  NULL";
+                    schema = $"[{dbfColumn.ColumnName}] [nvarchar]({dbfColumn.Length})  NULL";
                     break;
                 case DbfColumnType.Memo:
-                    schema = $"[{dbfColumn.Name}] [ntext]  NULL";
+                    schema = $"[{dbfColumn.ColumnName}] [ntext]  NULL";
                     break;
                 case DbfColumnType.Number:
                     if (dbfColumn.DecimalCount > 0)
                         schema =
-                            $"[{dbfColumn.Name}] [decimal]({dbfColumn.Length + dbfColumn.DecimalCount},{dbfColumn.DecimalCount}) NULL DEFAULT (NULL)";
+                            $"[{dbfColumn.ColumnName}] [decimal]({dbfColumn.Length + dbfColumn.DecimalCount},{dbfColumn.DecimalCount}) NULL DEFAULT (NULL)";
                     else
-                        schema = $"[{dbfColumn.Name}] [int] NULL DEFAULT (NULL)";
+                        schema = $"[{dbfColumn.ColumnName}] [int] NULL DEFAULT (NULL)";
                     break;
                 case DbfColumnType.SignedLong:
-                    schema = $"[{dbfColumn.Name}] [int] NULL DEFAULT (NULL)";
+                    schema = $"[{dbfColumn.ColumnName}] [int] NULL DEFAULT (NULL)";
                     break;
             }
 
