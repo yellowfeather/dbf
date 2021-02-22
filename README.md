@@ -5,7 +5,7 @@
 Command line utility to display DBF info and contents
 
 ```
-dbf 1.4.0
+dbf 1.5.0
 Copyright Chris Richards
 
   --summary        (Default: true) Print summary information
