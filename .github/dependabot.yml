@@ -1,0 +1,13 @@
+version: 2
+updates:
+- package-ecosystem: nuget
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: DbfDataReader
+    versions:
+    - 0.5.4
+    - 0.5.6
+    - 0.5.8
