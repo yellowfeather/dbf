@@ -4,7 +4,7 @@
     <Description>Command line utility to display DBF info and contents </Description>
     <Copyright>Copyright Chris Richards</Copyright>
     <Authors>Chris Richards</Authors>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>dbf</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>dbf</PackageId>
@@ -17,8 +17,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.8.0" />
-    <PackageReference Include="DbfDataReader" Version="0.7.0" />
+    <PackageReference Include="CommandLineParser" Version="2.9.1" />
+    <PackageReference Include="DbfDataReader" Version="0.9.0" />
   </ItemGroup>
 
 </Project>
